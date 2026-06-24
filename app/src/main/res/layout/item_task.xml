@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.cardview.widget.CardView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+    android:layout_width="match_parent"
+
+
+    android:layout_height="wrap_content"
+
+
+    android:layout_marginBottom="15dp"
+
+
+    app:cardCornerRadius="15dp"
+
+
+    app:cardElevation="5dp">
+
+
+
+    <LinearLayout
+
+
+        android:layout_width="match_parent"
+
+
+        android:layout_height="wrap_content"
+
+
+        android:orientation="vertical"
+
+
+        android:padding="16dp">
+
+
+
+        <TextView
+
+            android:id="@+id/tvTaskTitle"
+
+            android:text="tugas besar"
+
+            android:textStyle="bold"
+
+            android:textSize="20sp"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+
+
+
+
+        <TextView
+
+            android:id="@+id/tvDeadline"
+
+            android:text="Deadline"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+
+
+
+        <TextView
+
+            android:id="@+id/tvStatus"
+
+            android:text="Status Pending"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+
+
+
+        <TextView
+
+            android:id="@+id/tvNote"
+
+            android:text="Note"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+
+
+
+
+        <Button
+
+            android:text="Mark as Done"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+
+        <Button
+
+            android:id="@+id/btnDone"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="Mark as Done"
+
+            android:textColor="@color/white"
+
+            android:backgroundTint="@color/primary_blue"/>
+
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
