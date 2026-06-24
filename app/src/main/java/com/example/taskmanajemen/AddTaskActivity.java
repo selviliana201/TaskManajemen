@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +20,11 @@ public class AddTaskActivity extends AppCompatActivity {
     EditText etTitle, etDeadline, etNote;
     Spinner spPriority, spStatus;
     Button btnSave;
+    ImageButton btnBack;
+    TextView tvHeaderTitle;
     TaskViewModel viewModel;
+    
+    private int taskId = -1; // -1 means create new
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +37,12 @@ public class AddTaskActivity extends AppCompatActivity {
         spPriority = findViewById(R.id.spPriority);
         spStatus = findViewById(R.id.spStatus);
         btnSave = findViewById(R.id.btnSave);
+        btnBack = findViewById(R.id.btnBack);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
 
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         String[] priorities = {"LOW", "MEDIUM", "HIGH"};
-        // Menggunakan label yang lebih user-friendly
         String[] statuses = {"To Do", "Progress", "Selesai"};
 
         ArrayAdapter<String> priorityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, priorities);
@@ -44,6 +51,36 @@ public class AddTaskActivity extends AppCompatActivity {
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, statuses);
         spStatus.setAdapter(statusAdapter);
 
+        // Check if we are editing an existing task
+        if (getIntent().hasExtra("TASK_ID")) {
+            taskId = getIntent().getIntExtra("TASK_ID", -1);
+            etTitle.setText(getIntent().getStringExtra("TASK_TITLE"));
+            etDeadline.setText(getIntent().getStringExtra("TASK_DEADLINE"));
+            etNote.setText(getIntent().getStringExtra("TASK_NOTE"));
+            
+            String priority = getIntent().getStringExtra("TASK_PRIORITY");
+            if (priority != null) {
+                for (int i = 0; i < priorities.length; i++) {
+                    if (priorities[i].equals(priority)) {
+                        spPriority.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            String status = getIntent().getStringExtra("TASK_STATUS");
+            if (status != null) {
+                if (status.equalsIgnoreCase("TO DO")) spStatus.setSelection(0);
+                else if (status.equalsIgnoreCase("IN_PROGRESS")) spStatus.setSelection(1);
+                else if (status.equalsIgnoreCase("DONE")) spStatus.setSelection(2);
+            }
+
+            tvHeaderTitle.setText(R.string.edit_task);
+            btnSave.setText(R.string.update_task);
+        }
+
+        btnBack.setOnClickListener(v -> finish());
+
         btnSave.setOnClickListener(v -> {
             String title = etTitle.getText().toString().trim();
             String deadline = etDeadline.getText().toString().trim();
@@ -51,8 +88,7 @@ public class AddTaskActivity extends AppCompatActivity {
             String priorityValue = spPriority.getSelectedItem().toString();
             String statusDisplay = spStatus.getSelectedItem().toString();
             
-            // Konversi kembali ke format internal database
-            String statusValue = "PENDING";
+            String statusValue = "TO DO";
             if (statusDisplay.equals("Progress")) statusValue = "IN_PROGRESS";
             else if (statusDisplay.equals("Selesai")) statusValue = "DONE";
 
@@ -62,9 +98,14 @@ public class AddTaskActivity extends AppCompatActivity {
             }
 
             TaskEntity task = new TaskEntity(title, deadline, priorityValue, statusValue, note);
-            viewModel.insert(task);
-
-            Toast.makeText(this, "Tugas berhasil disimpan", Toast.LENGTH_SHORT).show();
+            if (taskId != -1) {
+                task.setId(taskId);
+                viewModel.update(task);
+                Toast.makeText(this, "Tugas berhasil diperbarui", Toast.LENGTH_SHORT).show();
+            } else {
+                viewModel.insert(task);
+                Toast.makeText(this, "Tugas berhasil disimpan", Toast.LENGTH_SHORT).show();
+            }
             finish();
         });
     }

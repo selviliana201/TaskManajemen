@@ -1,10 +1,10 @@
 package com.example.taskmanajemen.adapter;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,13 +19,16 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private List<TaskEntity> list = new ArrayList<>();
-    private OnStatusUpdateListener listener;
+    private OnTaskActionListener listener;
 
-    public interface OnStatusUpdateListener {
-        void onUpdate(TaskEntity task);
+    public interface OnTaskActionListener {
+        void onUpdateStatus(TaskEntity task);
+        void onDeleteTask(TaskEntity task);
+        void onEditTask(TaskEntity task);
+        void onSubmitTask(TaskEntity task);
     }
 
-    public TaskAdapter(OnStatusUpdateListener listener) {
+    public TaskAdapter(OnTaskActionListener listener) {
         this.listener = listener;
     }
 
@@ -49,24 +52,47 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.deadline.setText("Deadline: " + (task.getDeadline() != null ? task.getDeadline() : "-"));
         holder.note.setText(task.getNote());
 
-        String status = task.getStatus() != null ? task.getStatus() : "PENDING";
+        String status = task.getStatus();
+        if (status == null || status.equalsIgnoreCase("PENDING")) {
+            status = "TO DO";
+        }
         
-        // Display user-friendly status and colors
-        if (status.equalsIgnoreCase("PENDING")) {
+        // Reset visibility
+        holder.btnDone.setVisibility(View.VISIBLE);
+        
+        if (status.equalsIgnoreCase("TO DO")) {
             holder.status.setText("To Do");
             holder.status.setBackgroundResource(R.drawable.circle_yellow);
+            holder.btnDone.setText("Mulai Kerja");
+            holder.btnDone.setOnClickListener(v -> {
+                if (listener != null) listener.onUpdateStatus(task);
+            });
         } else if (status.equalsIgnoreCase("IN_PROGRESS")) {
             holder.status.setText("Progress");
             holder.status.setBackgroundResource(R.drawable.circle_blue);
+            holder.btnDone.setText("Selesaikan");
+            holder.btnDone.setOnClickListener(v -> {
+                if (listener != null) listener.onUpdateStatus(task);
+            });
         } else if (status.equalsIgnoreCase("DONE")) {
             holder.status.setText("Selesai");
             holder.status.setBackgroundResource(R.drawable.circle_green);
+            holder.btnDone.setText("Serahkan Tugas");
+            holder.btnDone.setOnClickListener(v -> {
+                if (listener != null) listener.onSubmitTask(task);
+            });
+        } else if (status.equalsIgnoreCase("SUBMITTED")) {
+            holder.status.setText("Diserahkan");
+            holder.status.setBackgroundResource(R.drawable.circle_green);
+            holder.btnDone.setVisibility(View.GONE);
         }
 
-        holder.btnDone.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onUpdate(task);
-            }
+        holder.btnDelete.setOnClickListener(v -> {
+            if (listener != null) listener.onDeleteTask(task);
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onEditTask(task);
         });
     }
 
@@ -78,6 +104,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, deadline, status, note;
         Button btnDone;
+        ImageButton btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +113,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             status = itemView.findViewById(R.id.tvStatus);
             note = itemView.findViewById(R.id.tvNote);
             btnDone = itemView.findViewById(R.id.btnDone);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

@@ -24,24 +24,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/tvStatus"
-                android:text="Judul Tugas"
+                android:layout_toStartOf="@id/llStatusContainer"
+                android:text="@string/task_title_placeholder"
                 android:textColor="@color/dark_text"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvStatus"
+            <LinearLayout
+                android:id="@+id/llStatusContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="4dp"
-                android:text="PENDING"
-                android:textColor="@color/white"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:background="@drawable/circle_yellow" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="@string/status_todo"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/circle_yellow" />
+
+                <ImageButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/delete_task"
+                    android:padding="4dp"
+                    android:src="@android:drawable/ic_menu_delete"
+                    app:tint="@color/red" />
+            </LinearLayout>
         </RelativeLayout>
 
         <TextView
@@ -49,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Deadline: -"
+            android:text="@string/deadline_placeholder"
             android:textColor="@color/gray_text"
             android:textSize="13sp" />
 
@@ -58,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Catatan tugas..."
+            android:text="@string/note_placeholder"
             android:textColor="@color/dark_text"
             android:textSize="14sp" />
 
@@ -69,16 +88,17 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDone"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update Status"
-                android:textColor="@color/primary_blue"
-                android:textSize="13sp"
+                android:text="@string/update_status"
+                android:textAllCaps="false"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                app:rippleColor="@color/light_blue" />
+                app:cornerRadius="8dp"
+                app:backgroundTint="@color/primary_blue" />
         </LinearLayout>
 
     </LinearLayout>

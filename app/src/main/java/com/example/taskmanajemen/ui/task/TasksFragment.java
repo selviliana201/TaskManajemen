@@ -1,18 +1,22 @@
 package com.example.taskmanajemen.ui.task;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskmanajemen.AddTaskActivity;
 import com.example.taskmanajemen.R;
 import com.example.taskmanajemen.adapter.TaskAdapter;
 import com.example.taskmanajemen.database.TaskEntity;
@@ -23,7 +27,7 @@ public class TasksFragment extends Fragment {
     RecyclerView recyclerView;
     TaskAdapter adapter;
     TaskViewModel viewModel;
-    TextView total, pending, progress, done;
+    TextView total, todo, progress, done;
 
     @Nullable
     @Override
@@ -36,7 +40,7 @@ public class TasksFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         total = view.findViewById(R.id.tvTotal);
-        pending = view.findViewById(R.id.tvPending);
+        todo = view.findViewById(R.id.tvToDo);
         progress = view.findViewById(R.id.tvProgress);
         done = view.findViewById(R.id.tvDone);
 
@@ -45,19 +49,54 @@ public class TasksFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        // Update status logic: Pending -> In Progress -> Done
-        adapter = new TaskAdapter(task -> {
-            String currentStatus = task.getStatus();
-            if (currentStatus == null || currentStatus.equalsIgnoreCase("PENDING")) {
-                task.setStatus("IN_PROGRESS");
-            } else if (currentStatus.equalsIgnoreCase("IN_PROGRESS")) {
-                task.setStatus("DONE");
-            } else {
-                // If it's already DONE, maybe we can reset it or do nothing
-                // For now, let's just keep it as DONE
-                return;
+        // Inisialisasi adapter dengan listener untuk Update Status, Hapus, Edit, dan Serahkan
+        adapter = new TaskAdapter(new TaskAdapter.OnTaskActionListener() {
+            @Override
+            public void onUpdateStatus(TaskEntity task) {
+                String currentStatus = task.getStatus();
+                // Menangani TO DO, PENDING, atau null untuk beralih ke IN_PROGRESS
+                if (currentStatus == null || currentStatus.equalsIgnoreCase("TO DO") || currentStatus.equalsIgnoreCase("PENDING")) {
+                    task.setStatus("IN_PROGRESS");
+                } else if (currentStatus.equalsIgnoreCase("IN_PROGRESS")) {
+                    task.setStatus("DONE");
+                } else {
+                    return;
+                }
+                viewModel.update(task);
+                Toast.makeText(getContext(), "Status diperbarui", Toast.LENGTH_SHORT).show();
             }
-            viewModel.update(task);
+
+            @Override
+            public void onDeleteTask(TaskEntity task) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.delete_task)
+                        .setMessage(R.string.delete_confirm)
+                        .setPositiveButton(R.string.delete, (dialog, which) -> {
+                            viewModel.delete(task);
+                            Toast.makeText(getContext(), "Tugas berhasil dihapus", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+            }
+
+            @Override
+            public void onEditTask(TaskEntity task) {
+                Intent intent = new Intent(getActivity(), AddTaskActivity.class);
+                intent.putExtra("TASK_ID", task.getId());
+                intent.putExtra("TASK_TITLE", task.getTitle());
+                intent.putExtra("TASK_DEADLINE", task.getDeadline());
+                intent.putExtra("TASK_NOTE", task.getNote());
+                intent.putExtra("TASK_PRIORITY", task.getPriority());
+                intent.putExtra("TASK_STATUS", task.getStatus());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSubmitTask(TaskEntity task) {
+                task.setStatus("SUBMITTED");
+                viewModel.update(task);
+                Toast.makeText(getContext(), R.string.task_submitted, Toast.LENGTH_SHORT).show();
+            }
         });
 
         recyclerView.setAdapter(adapter);
@@ -73,14 +112,16 @@ public class TasksFragment extends Fragment {
             for (TaskEntity x : tasks) {
                 String status = x.getStatus();
                 if (status != null) {
-                    if (status.equalsIgnoreCase("PENDING")) p++;
+                    if (status.equalsIgnoreCase("TO DO") || status.equalsIgnoreCase("PENDING")) p++;
                     else if (status.equalsIgnoreCase("IN_PROGRESS")) pr++;
-                    else if (status.equalsIgnoreCase("DONE")) d++;
+                    else if (status.equalsIgnoreCase("DONE") || status.equalsIgnoreCase("SUBMITTED")) d++;
+                } else {
+                    p++; // Default jika status null
                 }
             }
 
             total.setText(String.valueOf(t));
-            pending.setText(String.valueOf(p));
+            todo.setText(String.valueOf(p));
             progress.setText(String.valueOf(pr));
             done.setText(String.valueOf(d));
         });

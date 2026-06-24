@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">TaskManajemen</string>
+    <string name="task_title_placeholder">Judul Tugas</string>
+    <string name="status_todo">TO DO</string>
+    <string name="status_in_progress">IN PROGRESS</string>
+    <string name="status_done">DONE</string>
+    <string name="status_submitted">SUBMITTED</string>
+    <string name="deadline_placeholder">Deadline: -</string>
+    <string name="note_placeholder">Catatan tugas...</string>
+    <string name="update_status">Update Status</string>
+
+    <!-- Add/Edit Task Activity Strings -->
+    <string name="create_new_task">Buat Tugas Baru</string>
+    <string name="edit_task">Edit Tugas</string>
+    <string name="fill_details_below">Isi detail tugas Anda di bawah ini</string>
+    <string name="task_title_label">Judul Tugas</string>
+    <string name="task_title_hint">Contoh: Belajar Android</string>
+    <string name="deadline_label">Tenggat Waktu (Deadline)</string>
+    <string name="deadline_hint">YYYY-MM-DD HH:mm</string>
+    <string name="priority_label">Prioritas</string>
+    <string name="status_label">Status</string>
+    <string name="note_label">Catatan</string>
+    <string name="note_hint">Tulis deskripsi tugas di sini...</string>
+    <string name="save_task">SIMPAN TUGAS</string>
+    <string name="update_task">UPDATE TUGAS</string>
+    <string name="delete_task">Hapus Tugas</string>
+    <string name="delete_confirm">Apakah Anda yakin ingin menghapus tugas ini?</string>
+    <string name="delete">Hapus</string>
+    <string name="cancel">Batal</string>
+    <string name="back">Kembali</string>
+
+    <string name="submit_task">Serahkan Tugas</string>
+    <string name="task_submitted">Tugas Berhasil Diserahkan</string>
+    <string name="start_work">Mulai Kerja</string>
+    <string name="finish_work">Selesaikan</string>
 </resources>
