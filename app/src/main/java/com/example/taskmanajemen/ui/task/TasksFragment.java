@@ -49,12 +49,11 @@ public class TasksFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        // Inisialisasi adapter dengan listener untuk Update Status, Hapus, Edit, dan Serahkan
+        // Inisialisasi adapter dengan listener untuk Update Status, Hapus, dan Edit
         adapter = new TaskAdapter(new TaskAdapter.OnTaskActionListener() {
             @Override
             public void onUpdateStatus(TaskEntity task) {
                 String currentStatus = task.getStatus();
-                // Menangani TO DO, PENDING, atau null untuk beralih ke IN_PROGRESS
                 if (currentStatus == null || currentStatus.equalsIgnoreCase("TO DO") || currentStatus.equalsIgnoreCase("PENDING")) {
                     task.setStatus("IN_PROGRESS");
                 } else if (currentStatus.equalsIgnoreCase("IN_PROGRESS")) {
@@ -90,13 +89,6 @@ public class TasksFragment extends Fragment {
                 intent.putExtra("TASK_STATUS", task.getStatus());
                 startActivity(intent);
             }
-
-            @Override
-            public void onSubmitTask(TaskEntity task) {
-                task.setStatus("SUBMITTED");
-                viewModel.update(task);
-                Toast.makeText(getContext(), R.string.task_submitted, Toast.LENGTH_SHORT).show();
-            }
         });
 
         recyclerView.setAdapter(adapter);
@@ -116,7 +108,7 @@ public class TasksFragment extends Fragment {
                     else if (status.equalsIgnoreCase("IN_PROGRESS")) pr++;
                     else if (status.equalsIgnoreCase("DONE") || status.equalsIgnoreCase("SUBMITTED")) d++;
                 } else {
-                    p++; // Default jika status null
+                    p++;
                 }
             }
 

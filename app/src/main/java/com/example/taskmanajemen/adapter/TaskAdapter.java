@@ -25,7 +25,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         void onUpdateStatus(TaskEntity task);
         void onDeleteTask(TaskEntity task);
         void onEditTask(TaskEntity task);
-        void onSubmitTask(TaskEntity task);
     }
 
     public TaskAdapter(OnTaskActionListener listener) {
@@ -77,12 +76,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         } else if (status.equalsIgnoreCase("DONE")) {
             holder.status.setText("Selesai");
             holder.status.setBackgroundResource(R.drawable.circle_green);
-            holder.btnDone.setText("Serahkan Tugas");
-            holder.btnDone.setOnClickListener(v -> {
-                if (listener != null) listener.onSubmitTask(task);
-            });
-        } else if (status.equalsIgnoreCase("SUBMITTED")) {
-            holder.status.setText("Diserahkan");
+            holder.btnDone.setVisibility(View.GONE);
+        } else {
+            // Fallback for any other status like SUBMITTED if they still exist in DB
+            holder.status.setText(status);
             holder.status.setBackgroundResource(R.drawable.circle_green);
             holder.btnDone.setVisibility(View.GONE);
         }
