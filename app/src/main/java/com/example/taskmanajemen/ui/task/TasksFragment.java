@@ -35,7 +35,6 @@ public class TasksFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize TextViews
         total = view.findViewById(R.id.tvTotal);
         pending = view.findViewById(R.id.tvPending);
         progress = view.findViewById(R.id.tvProgress);
@@ -46,14 +45,23 @@ public class TasksFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
+        // Update status logic: Pending -> In Progress -> Done
         adapter = new TaskAdapter(task -> {
-            task.setStatus("DONE");
+            String currentStatus = task.getStatus();
+            if (currentStatus == null || currentStatus.equalsIgnoreCase("PENDING")) {
+                task.setStatus("IN_PROGRESS");
+            } else if (currentStatus.equalsIgnoreCase("IN_PROGRESS")) {
+                task.setStatus("DONE");
+            } else {
+                // If it's already DONE, maybe we can reset it or do nothing
+                // For now, let's just keep it as DONE
+                return;
+            }
             viewModel.update(task);
         });
 
         recyclerView.setAdapter(adapter);
 
-        // Observer with statistics logic
         viewModel.getTasks().observe(getViewLifecycleOwner(), tasks -> {
             adapter.setData(tasks);
 
@@ -65,16 +73,16 @@ public class TasksFragment extends Fragment {
             for (TaskEntity x : tasks) {
                 String status = x.getStatus();
                 if (status != null) {
-                    if (status.equals("PENDING")) p++;
-                    else if (status.equals("IN_PROGRESS")) pr++;
-                    else if (status.equals("DONE")) d++;
+                    if (status.equalsIgnoreCase("PENDING")) p++;
+                    else if (status.equalsIgnoreCase("IN_PROGRESS")) pr++;
+                    else if (status.equalsIgnoreCase("DONE")) d++;
                 }
             }
 
-            total.setText(t + "\nTotal");
-            pending.setText(p + "\nPending");
-            progress.setText(pr + "\nProgress");
-            done.setText(d + "\nDone");
+            total.setText(String.valueOf(t));
+            pending.setText(String.valueOf(p));
+            progress.setText(String.valueOf(pr));
+            done.setText(String.valueOf(d));
         });
     }
 }

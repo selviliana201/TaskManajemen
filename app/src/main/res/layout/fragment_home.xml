@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/white">
 
     <TextView
+        android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome to Task Manajemen"
@@ -15,10 +17,12 @@
         android:textColor="@color/primary_blue" />
 
     <TextView
+        android:id="@+id/tvSummary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Manage your daily tasks efficiently"
         android:layout_marginTop="8dp"
-        android:textColor="@color/gray_text" />
+        android:textColor="@color/gray_text"
+        android:gravity="center" />
 
 </LinearLayout>
