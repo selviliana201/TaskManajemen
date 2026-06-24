@@ -33,4 +33,18 @@
     <string name="task_submitted">Tugas Berhasil Diserahkan</string>
     <string name="start_work">Mulai Kerja</string>
     <string name="finish_work">Selesaikan</string>
+
+    <!-- UI Strings -->
+    <string name="welcome_title">Halo, Selamat Datang!</string>
+    <string name="welcome_subtitle">Ayo selesaikan tugasmu hari ini.</string>
+    <string name="task_summary_title">Ringkasan Tugas</string>
+    <string name="view_all_tasks">Lihat Semua Tugas</string>
+    <string name="productivity_tips">Tips Produktivitas</string>
+    <string name="pomodoro_title">Teknik Pomodoro</string>
+    <string name="pomodoro_desc">Bekerja 25 menit, istirahat 5 menit untuk menjaga fokus.</string>
+    <string name="splash_quote">Mulai Produktif Sekarang!</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_tasks">Tugas</string>
+    <string name="statistics_title">Statistik Tugas</string>
+    <string name="list_title">Daftar Tugas</string>
 </resources>

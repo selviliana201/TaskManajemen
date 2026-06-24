@@ -6,30 +6,33 @@
     android:orientation="vertical"
     android:background="@color/bg_light">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Statistik Tugas"
+        android:text="@string/statistics_title"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/dark_text"
-        android:layout_margin="16dp"/>
+        android:layout_margin="20dp"/>
 
-    <!-- Menggunakan weight agar 4 kotak muat dalam satu baris tanpa scroll -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
+        android:paddingHorizontal="12dp"
         android:weightSum="4">
 
-        <!-- Total Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_margin="4dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,107 +45,104 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/primary_blue"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textColor="@color/primary_blue"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- To Do Card (Sebelumnya Pending) -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_margin="4dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="#FFF8E1">
+                android:background="@color/bg_todo">
                 <TextView
                     android:id="@+id/tvToDo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/yellow"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="To Do"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textColor="@color/yellow"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Progress Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_margin="4dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="#E1F5FE">
+                android:background="@color/bg_progress">
                 <TextView
                     android:id="@+id/tvProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="#03A9F4"/>
+                    android:textColor="@color/blue_text"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Progress"
-                    android:textSize="10sp"
-                    android:textColor="#03A9F4"/>
+                    android:textSize="11sp"
+                    android:textColor="@color/blue_text"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Selesai Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_margin="4dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="#E8F5E9">
+                android:background="@color/bg_done">
                 <TextView
                     android:id="@+id/tvDone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/green"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Selesai"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textColor="@color/green"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -152,18 +152,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Daftar Tugas"
+        android:text="@string/list_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/dark_text"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="28dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTasks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:clipToPadding="false"
         android:paddingBottom="80dp"/>
 

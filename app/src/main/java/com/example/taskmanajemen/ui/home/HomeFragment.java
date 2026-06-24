@@ -11,13 +11,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.taskmanajemen.MainActivity;
 import com.example.taskmanajemen.R;
+import com.example.taskmanajemen.database.TaskEntity;
 import com.example.taskmanajemen.viewmodel.TaskViewModel;
+import com.google.android.material.button.MaterialButton;
 
 public class HomeFragment extends Fragment {
 
     private TaskViewModel viewModel;
-    private TextView tvWelcome, tvSummary;
+    private TextView tvSummary;
+    private MaterialButton btnViewTasks;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,17 +32,28 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvWelcome = view.findViewById(R.id.tvWelcome);
         tvSummary = view.findViewById(R.id.tvSummary);
+        btnViewTasks = view.findViewById(R.id.btnViewTasks);
 
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         viewModel.getTasks().observe(getViewLifecycleOwner(), tasks -> {
             if (tasks != null && !tasks.isEmpty()) {
-                int total = tasks.size();
-                tvSummary.setText("Anda memiliki " + total + " tugas dalam daftar.");
+                int pending = 0;
+                for (TaskEntity task : tasks) {
+                    if (task.getStatus() == null || task.getStatus().equalsIgnoreCase("TO DO") || task.getStatus().equalsIgnoreCase("IN_PROGRESS")) {
+                        pending++;
+                    }
+                }
+                tvSummary.setText("Kamu memiliki " + pending + " tugas tertunda.");
             } else {
                 tvSummary.setText("Belum ada tugas. Klik tombol + untuk menambah.");
+            }
+        });
+
+        btnViewTasks.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).navigateToTasks();
             }
         });
     }

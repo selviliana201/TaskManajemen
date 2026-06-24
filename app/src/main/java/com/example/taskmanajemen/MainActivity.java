@@ -14,8 +14,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigation;
-    FloatingActionButton add;
+    private BottomNavigationView bottomNavigation;
+    private FloatingActionButton add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNavigation);
         add = findViewById(R.id.fabAddTask);
 
-        load(new HomeFragment());
+        if (savedInstanceState == null) {
+            load(new HomeFragment());
+        }
 
         bottomNavigation.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.navigation_home){
@@ -46,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void load(Fragment fragment){
+    public void navigateToTasks() {
+        bottomNavigation.setSelectedItemId(R.id.navigation_tasks);
+    }
+
+    private void load(Fragment fragment){
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
